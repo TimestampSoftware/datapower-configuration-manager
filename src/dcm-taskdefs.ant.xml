@@ -3872,14 +3872,7 @@
     <attribute name="capturesoma" default=""/>
     <attribute name="file" default="file-delete.ant.xml"/>
     <!-- <attribute name="file.absolute" /> -->
-    <attribute name="remote" default="temporary:///${file}"/>
-
-    <!-- <import file="common-definitions.ant.xml" optional="no"/> -->
-    <!-- Ensure the file exists on DP so that it can be deleted. -->
-    <!-- <ant antfile="common-file-set.ant.xml">
-        <property name="local" value="${file.absolute}"/>
-        <property name="remote" value="${remote}"/>
-    </ant> -->
+    <attribute name="remote" default="local:///${file}"/>
 
 
     <sequential>
@@ -3887,7 +3880,7 @@
       <local name="delete_response"/>
 
       <!-- Delete the existing object. -->
-      <wdp operation="DeleteFile" responseprop="delete_response" successprop="delete_success" dumpinput="@{dumpinput}" dumpoutput="@{dumpoutput}" capturesoma="@{capturesoma}">
+      <wdp operation="DeleteFile" responseprop="delete_response" successprop="file-delete-successprop" dumpinput="@{dumpinput}" dumpoutput="@{dumpoutput}" capturesoma="@{capturesoma}">
         <domain>@{domain}</domain>
         <hostname>@{host}</hostname>
         <port>@{port}</port>
@@ -3896,11 +3889,11 @@
         <remote>@{remote}</remote>
       </wdp>
 
-      <!-- <echo>::: delete_success = ${delete_success}</echo> -->
+      <!-- <echo>::: delete_success = ${file-delete-successprop}</echo> -->
       <!-- <echo>::: delete_response = ${delete_response}</echo> -->
 
       <if>
-        <istrue value="${delete_success}"/>
+        <istrue value="${file-delete-successprop}"/>
         <then>
           <echo>Deleted file @{remote} in domain @{domain} on @{host}.</echo>
         </then>
@@ -3914,6 +3907,54 @@
 
   </macrodef>
 
+
+  <macrodef name="deleteFolder">
+    <attribute name="host"/>
+    <attribute name="port" default="5550"/>
+    <attribute name="uid"/>
+    <attribute name="pwd"/>
+    <attribute name="domain"/>
+    <attribute name="xmlmanager" default=""/>
+    <attribute name="dumpinput" default="false"/>
+    <attribute name="dumpoutput" default="false"/>
+    <attribute name="capturesoma" default=""/>
+    <attribute name="folder" default=""/>
+    <!-- <attribute name="file.absolute" /> -->
+    <attribute name="remote" default="local:///${folder}"/>
+
+
+
+    <sequential>
+      <local name="delete_success"/>
+      <local name="delete_response"/>
+
+      <!-- Delete the existing object. -->
+      <wdp operation="RemoveDirectory" responseprop="delete_response" successprop="file-dir-delete-successprop" dumpinput="@{dumpinput}" dumpoutput="@{dumpoutput}" capturesoma="@{capturesoma}">
+        <domain>@{domain}</domain>
+        <hostname>@{host}</hostname>
+        <port>@{port}</port>
+        <uid>@{uid}</uid>
+        <pwd>@{pwd}</pwd>
+        <remote>@{remote}</remote>
+      </wdp>
+
+      <!-- <echo>::: delete_success = ${file-dir-delete-successprop}</echo>
+      <echo>::: delete_response = ${delete_response}</echo> -->
+
+      <if>
+        <istrue value="${file-dir-delete-successprop}"/>
+        <then>
+          <echo>Deleted folder @{remote} in domain @{domain} on @{host}.</echo>
+        </then>
+        <else>
+          <echo>Raw response for deleteConfig: ${delete_response}</echo>
+          <fail message="Failed to delete @{remote} in @{domain} on @{host}."/>
+        </else>
+      </if>
+
+    </sequential>
+
+  </macrodef>
 
 
   <!--
