@@ -3880,7 +3880,7 @@
       <local name="delete_response"/>
 
       <!-- Delete the existing object. -->
-      <wdp operation="DeleteFile" responseprop="delete_response" successprop="file-delete-successprop" dumpinput="@{dumpinput}" dumpoutput="@{dumpoutput}" capturesoma="@{capturesoma}">
+      <wdp operation="DeleteFile" responseprop="delete_response" successprop="delete_success" dumpinput="@{dumpinput}" dumpoutput="@{dumpoutput}" capturesoma="@{capturesoma}">
         <domain>@{domain}</domain>
         <hostname>@{host}</hostname>
         <port>@{port}</port>
@@ -3889,11 +3889,11 @@
         <remote>@{remote}</remote>
       </wdp>
 
-      <!-- <echo>::: delete_success = ${file-delete-successprop}</echo> -->
+      <!-- <echo>::: delete_success = ${delete_success}</echo> -->
       <!-- <echo>::: delete_response = ${delete_response}</echo> -->
 
       <if>
-        <istrue value="${file-delete-successprop}"/>
+        <istrue value="${delete_success}"/>
         <then>
           <echo>Deleted file @{remote} in domain @{domain} on @{host}.</echo>
         </then>
@@ -3929,7 +3929,7 @@
       <local name="delete_response"/>
 
       <!-- Delete the existing object. -->
-      <wdp operation="RemoveDirectory" responseprop="delete_response" successprop="file-dir-delete-successprop" dumpinput="@{dumpinput}" dumpoutput="@{dumpoutput}" capturesoma="@{capturesoma}">
+      <wdp operation="RemoveDirectory" responseprop="delete_response" successprop="delete_success" dumpinput="@{dumpinput}" dumpoutput="@{dumpoutput}" capturesoma="@{capturesoma}">
         <domain>@{domain}</domain>
         <hostname>@{host}</hostname>
         <port>@{port}</port>
@@ -3938,11 +3938,11 @@
         <remote>@{remote}</remote>
       </wdp>
 
-      <!-- <echo>::: delete_success = ${file-dir-delete-successprop}</echo>
+      <!-- <echo>::: delete_success = ${delete_success}</echo>
       <echo>::: delete_response = ${delete_response}</echo> -->
 
       <if>
-        <istrue value="${file-dir-delete-successprop}"/>
+        <istrue value="${delete_success}"/>
         <then>
           <echo>Deleted folder @{remote} in domain @{domain} on @{host}.</echo>
         </then>
